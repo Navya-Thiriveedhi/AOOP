@@ -1,0 +1,22 @@
+# service/routes.py
+
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework import status
+from myapp.models import Product  # Replace 'myapp' with your actual app name
+
+@api_view(['GET'])
+def product_detail(request, pk):
+    try:
+        product = Product.objects.get(pk=pk)
+    except Product.DoesNotExist:
+        return Response({'detail': 'Not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+    # Return product details as a response
+    return Response({
+        'id': product.id,
+        'name': product.name,
+        'description': product.description,
+        'price': product.price,
+        'stock': product.stock
+    }, status=status.HTTP_200_OK)
