@@ -1,0 +1,13 @@
+Feature: Product Management
+  As a user
+  I want to view all products
+  So that I can see the available products in the system
+
+  Scenario: Listing all products
+    Given the following products exist:
+      | Product Name     | Price  |
+      | Test Product 1   | $10.00 |
+      | Test Product 2   | $15.00 |
+    When I view the list of products
+    Then I should see "Test Product 1" in the product list
+    And I should see "Test Product 2" in the product list
