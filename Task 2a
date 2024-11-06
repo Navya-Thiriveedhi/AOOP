@@ -1,0 +1,25 @@
+# tests/test_models.py
+
+from django.test import TestCase
+from myapp.models import Product  # Replace 'myapp' with your actual app name
+
+class ProductModelTest(TestCase):
+    
+    def setUp(self):
+        # Set up a sample product for testing
+        self.product = Product.objects.create(
+            name="Test Product",
+            description="A test product description",
+            price=19.99,
+            stock=50
+        )
+
+    def test_product_read(self):
+        # Read the product from the database
+        product = Product.objects.get(id=self.product.id)
+        
+        # Check if the product's attributes match what we set up
+        self.assertEqual(product.name, "Test Product")
+        self.assertEqual(product.description, "A test product description")
+        self.assertEqual(product.price, 19.99)
+        self.assertEqual(product.stock, 50)
