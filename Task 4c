@@ -1,0 +1,21 @@
+from flask import Flask, request, jsonify
+from models import db, Item  # Assuming you're using SQLAlchemy for models
+
+app = Flask(__name__)
+
+@app.route('/delete_item/<int:item_id>', methods=['DELETE'])
+def delete_item(item_id):
+    # Retrieve the item by ID
+    item = Item.query.get(item_id)
+    
+    if not item:
+        return jsonify({"message": "Item not found"}), 404
+    
+    # Delete the item
+    db.session.delete(item)
+    db.session.commit()
+
+    return jsonify({"message": "Item deleted successfully"}), 200
+
+if __name__ == '__main__':
+    app.run(debug=True)
