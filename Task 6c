@@ -1,0 +1,9 @@
+Feature: Product Management
+  As a user
+  I want to be able to delete a product
+  So that I can manage the product list effectively
+
+  Scenario: Deleting a product
+    Given a product "Test Product" exists in the system
+    When I delete the product "Test Product"
+    Then the product "Test Product" should no longer be in the product list
