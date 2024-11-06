@@ -1,0 +1,26 @@
+@Given("the following products exist:")
+public void theFollowingProductsExist(DataTable productsTable) {
+    List<Map<String, String>> products = productsTable.asMaps(String.class, String.class);
+    for (Map<String, String> product : products) {
+        // Code to add products to the system
+        productService.addProduct(new Product(product.get("Product Name"), product.get("Price")));
+    }
+}
+
+@When("I search for a product named {string}")
+public void iSearchForAProductNamed(String productName) {
+    // Code to search for the product by name
+    searchResults = productService.searchProductsByName(productName);
+}
+
+@Then("I should see {string} in the search results")
+public void iShouldSeeProductInTheSearchResults(String productName) {
+    // Code to verify the product is in the search results
+    assertTrue(searchResults.stream().anyMatch(product -> product.getName().equals(productName)));
+}
+
+@Then("I should not see {string} in the search results")
+public void iShouldNotSeeProductInTheSearchResults(String productName) {
+    // Code to verify the product is not in the search results
+    assertFalse(searchResults.stream().anyMatch(product -> product.getName().equals(productName)));
+}
