@@ -1,0 +1,31 @@
+# tests/test_routes.py
+
+from django.test import TestCase
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APIClient
+from myapp.models import Product  # Replace 'myapp' with your actual app name
+
+class ProductRoutesTest(TestCase):
+    
+    def setUp(self):
+        self.client = APIClient()
+        # Set up a sample product for testing
+        self.product = Product.objects.create(
+            name="Product to Delete",
+            description="This product will be deleted",
+            price=29.99,
+            stock=30
+        )
+
+    def test_delete_product(self):
+        # Use reverse to get the URL for the product delete route
+        url = reverse('product-detail', args=[self.product.id])  # Replace 'product-detail' with your actual route name
+        response = self.client.delete(url)
+        
+        # Check that the response status code is 204 (No Content), indicating successful deletion
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        
+        # Check if the product is deleted by trying to retrieve it again
+        with self.assertRaises(Product.DoesNotExist):
+            Product.objects.get(id=self.product.id)
