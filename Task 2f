@@ -1,0 +1,25 @@
+# tests/test_models.py
+
+from django.test import TestCase
+from myapp.models import Product, Category  # Replace 'myapp' with your actual app name
+
+class ProductModelTest(TestCase):
+    
+    def setUp(self):
+        # Set up a category and products for testing
+        self.category = Category.objects.create(name="Electronics")
+        Product.objects.create(name="Laptop", category=self.category, price=999.99, stock=10)
+        Product.objects.create(name="Smartphone", category=self.category, price=499.99, stock=25)
+        Product.objects.create(name="Tablet", category=self.category, price=299.99, stock=15)
+
+    def test_find_products_by_category(self):
+        # Retrieve products by category
+        products_in_category = Product.objects.filter(category=self.category)
+        
+        # Check if the correct number of products is retrieved
+        self.assertEqual(products_in_category.count(), 3)
+        
+        # Optionally, check the product names to verify the list
+        product_names = [product.name for product in products_in_category]
+        self.assertIn("Laptop", product_names)
+        self.assertIn("Smartphone", product_names)
