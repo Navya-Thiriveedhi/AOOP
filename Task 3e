@@ -1,0 +1,29 @@
+# tests/test_routes.py
+
+from django.test import TestCase
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APIClient
+from myapp.models import Product  # Replace 'myapp' with your actual app name
+
+class ProductRoutesTest(TestCase):
+    
+    def setUp(self):
+        self.client = APIClient()
+        # Set up products for testing
+        Product.objects.create(name="Product One", description="Description for product one", price=10.99, stock=15)
+        Product.objects.create(name="Product Two", description="Description for product two", price=20.99, stock=30)
+        Product.objects.create(name="Another Product", description="Description for anot
+def test_list_products_by_name(self):
+        # Use reverse to get the URL for the product list route with a search filter by name
+        url = reverse('product-list')  # Replace 'product-list' with your actual route name
+        response = self.client.get(url, {'name': 'Product One'})
+        
+        # Check that the response status code is 200 (OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        # Check if the response contains the correct product based on the name filter
+        product_names = [product['name'] for product in response.data]
+        self.assertIn("Product One", product_names)
+        self.assertNotIn("Product Two", product_names)
+        self.assertNotIn("Another Product", product_names)
