@@ -1,0 +1,29 @@
+import json
+from models import db, Product  # Assuming you're using SQLAlchemy for models
+
+def load_products():
+    # Load product data from a JSON file or directly from a database
+    with open('data/products.json') as f:
+        products_data = json.load(f)
+
+    for product_data in products_data:
+        # Check if the product already exists
+        product = Product.query.filter_by(name=product_data['name']).first()
+        
+        if not product:
+            # If not, create a new product
+            product = Product(
+                name=product_data['name'],
+                category=product_data['category'],
+                price=product_data['price'],
+                stock=product_data['stock']
+            )
+            db.session.add(product)
+    
+    # Commit all changes to the database
+    db.session.commit()
+
+    print(f"Loaded {len(products_data)} products.")
+
+# Call the function to load the products
+load_products()
