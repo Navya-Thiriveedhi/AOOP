@@ -1,0 +1,15 @@
+Feature: Product Search by Availability
+  As a user
+  I want to search for products based on their availability
+  So that I can view only the products that are in stock
+
+  Scenario: Searching a product by availability
+    Given the following products exist:
+      | Product Name     | Availability  | Price  |
+      | Test Product 1   | In Stock      | $100   |
+      | Test Product 2   | Out of Stock  | $50    |
+      | Test Product 3   | In Stock      | $150   |
+    When I search for products that are "In Stock"
+    Then I should see "Test Product 1" in the search results
+    And I should see "Test Product 3" in the search results
+    And I should not see "Test Product 2" in the search results
