@@ -1,0 +1,25 @@
+# tests/test_models.py
+
+from django.test import TestCase
+from myapp.models import Product  # Replace 'myapp' with your actual app name
+
+class ProductModelTest(TestCase):
+    
+    def setUp(self):
+        # Set up a product for testing
+        self.product = Product.objects.create(
+            name="Unique Product Name",
+            description="A product with a unique name",
+            price=59.99,
+            stock=25
+        )
+
+    def test_find_product_by_name(self):
+        # Retrieve the product by its name
+        product = Product.objects.get(name="Unique Product Name")
+        
+        # Check if the retrieved product's attributes match the expected values
+        self.assertEqual(product.name, "Unique Product Name")
+        self.assertEqual(product.description, "A product with a unique name")
+        self.assertEqual(product.price, 59.99)
+        self.assertEqual(product.stock, 25)
