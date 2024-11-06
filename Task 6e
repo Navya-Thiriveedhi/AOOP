@@ -1,0 +1,15 @@
+Feature: Product Search by Category
+  As a user
+  I want to search for products by category
+  So that I can find products within a specific category
+
+  Scenario: Searching a product by category
+    Given the following products exist:
+      | Product Name     | Category     | Price  |
+      | Test Product 1   | Electronics  | $100  |
+      | Test Product 2   | Clothing     | $50   |
+      | Test Product 3   | Electronics  | $150  |
+    When I search for products in the "Electronics" category
+    Then I should see "Test Product 1" in the search results
+    And I should see "Test Product 3" in the search results
+    And I should not see "Test Product 2" in the search results
