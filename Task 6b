@@ -1,0 +1,8 @@
+Feature: Product Management
+
+  Scenario: Update an existing product
+    Given I have an existing product with ID "123"
+    When I update the product with new name "Updated Product Name" and price "199.99"
+    Then the product's name should be "Updated Product Name"
+    And the product's price should be "199.99"
+    And I should see a confirmation message "Product updated successfully"
