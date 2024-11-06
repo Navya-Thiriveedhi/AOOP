@@ -1,0 +1,31 @@
+# tests/test_routes.py
+
+from django.test import TestCase
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APIClient
+from myapp.models import Product  # Replace 'myapp' with your actual app name
+
+class ProductRoutesTest(TestCase):
+    
+    def setUp(self):
+        self.client = APIClient()
+        # Set up a sample product for testing
+        self.product = Product.objects.create(
+            name="Sample Product",
+            description="A sample product description",
+            price=19.99,
+            stock=50
+        )
+
+    def test_read_product(self):
+        # Use reverse to get the URL for the product detail route
+        url = reverse('product-detail', args=[self.product.id])  # Replace 'product-detail' with your actual route name
+        response = self.client.get(url)
+        
+        # Check that the response status code is 200 (OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        # Check that the response data contains the correct product information
+        self.assertEqual(response.data['name'], "Sample Product")
+        self.assert
