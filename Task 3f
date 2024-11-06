@@ -1,0 +1,35 @@
+# tests/test_routes.py
+
+from django.test import TestCase
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APIClient
+from myapp.models import Product, Category  # Replace 'myapp' with your actual app name
+
+class ProductRoutesTest(TestCase):
+    
+    def setUp(self):
+        self.client = APIClient()
+        
+        # Set up categories for testing
+        self.category1 = Category.objects.create(name="Electronics")
+        self.category2 = Category.objects.create(name="Clothing")
+        
+        # Set up products for testing
+        Product.objects.create(name="Laptop", category=self.category1, description="A laptop", price=999.99, stock=10)
+        Product.objects.create(name="Smartphone", category=self.category1, description="A smartphone", price=699.99, stock=20)
+        Product.objects.create(name="T-shirt", category=self.category2, description="A t-shirt", price=19.99, stock=50)
+
+    def test_list_products_by_category(self):
+        # Use reverse to get the URL for the product list route, filtering by category
+        url = reverse('product-list')  # Replace 'product-list' with your actual route name
+        response = self.client.get(url, {'category': self.category1.id})
+        
+        # Check that the response status code is 200 (OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        # Check if the response contains the correct products from the specified category
+        product_names = [product['name'] for product in response.data]
+        self.assertIn("Laptop", product_names)
+        self.assertIn("Smartphone", product_names)
+        self.assertNotIn("T-shirt", product_names)  # Ensure products from other categories aren't included
