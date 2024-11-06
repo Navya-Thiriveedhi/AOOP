@@ -1,0 +1,17 @@
+Feature: Product Management
+
+  Scenario: Reading a product by its ID
+    Given a product exists with the following details:
+      | name        | category  | price | stock |
+      | Product A   | Category 1| 29.99 | 100   |
+    When I request the product with ID 1
+    Then the response should contain the following product details:
+      | name        | category  | price | stock |
+      | Product A   | Category 1| 29.99 | 100   |
+
+  Scenario: Product not found by invalid ID
+    Given a product exists with the following details:
+      | name        | category  | price | stock |
+      | Product B   | Category 2| 19.99 | 50    |
+    When I request the product with ID 999
+    Then I should receive a "Product not found" message
