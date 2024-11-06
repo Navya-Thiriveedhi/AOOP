@@ -1,0 +1,30 @@
+# tests/test_routes.py
+
+from django.test import TestCase
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APIClient
+from myapp.models import Product  # Replace 'myapp' with your actual app name
+
+class ProductRoutesTest(TestCase):
+    
+    def setUp(self):
+        self.client = APIClient()
+        # Set up products for testing
+        Product.objects.create(name="Available Product 1", description="A product in stock", price=10.99, stock=10)
+        Product.objects.create(name="Available Product 2", description="Another product in stock", price=15.99, stock=5)
+        Product.objects.create(name="Out of Stock Product", description="A product out of stock", price=20.99, stock=0)
+
+    def test_list_products_by_availability(self):
+        # Use reverse to get the URL for the product list route, filtering by stock > 0
+        url = reverse('product-list')  # Replace 'product-list' with your actual route name
+        response = self.client.get(url, {'availability': 'in-stock'})
+        
+        # Check that the response status code is 200 (OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        # Check if the response contains the correct products that are in stock
+        product_names = [product['name'] for product in response.data]
+        self.assertIn("Available Product 1", product_names)
+        self.assertIn("Available Product 2", product_names)
+        self.assertNotIn("Out of Stock Product", product_names)  # Ensure the out of stock product is not listed
