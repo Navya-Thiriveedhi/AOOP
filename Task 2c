@@ -1,0 +1,23 @@
+# tests/test_models.py
+
+from django.test import TestCase
+from myapp.models import Product  # Replace 'myapp' with your actual app name
+
+class ProductModelTest(TestCase):
+    
+    def setUp(self):
+        # Set up a sample product for testing
+        self.product = Product.objects.create(
+            name="Product to Delete",
+            description="This product will be deleted in the test",
+            price=49.99,
+            stock=10
+        )
+
+    def test_product_delete(self):
+        # Delete the product
+        self.product.delete()
+        
+        # Check that the product no longer exists in the database
+        with self.assertRaises(Product.DoesNotExist):
+            Product.objects.get(id=self.product.id)
