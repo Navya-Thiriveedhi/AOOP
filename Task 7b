@@ -1,0 +1,14 @@
+from behave import given, when, then
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+@given('I am on the "{page}" page')
+def step_impl(context, page):
+    context.driver = webdriver.Chrome()
+    context.driver.get(f'http://example.com/{page}')
+
+@then('I should see the text "{text}" on the page')
+def step_impl(context, text):
+    body = context.driver.find_element(By.TAG_NAME, "body")
+    assert text in body.text, f'Expected text "{text}" not found on the page.'
+    context.driver.quit()
